@@ -6,12 +6,14 @@ __powerline() {
   readonly GIT_BRANCH_CHANGED_SYMBOL='+'
   readonly GIT_NEED_PUSH_SYMBOL='⇡'
   readonly GIT_NEED_PULL_SYMBOL='⇣'
+  readonly PYTHON_SYMBOL='🐍'
 
   readonly FG_BASE02="\[$(tput setaf 0)\]"
   readonly FG_BASE3="\[$(tput setaf 15)\]"
 
   readonly BG_WHITE="\[$(tput setab 15)\]"
   readonly BG_LUNA_GREEN="\[$(tput setab 23)\]"
+  readonly BG_GRAY="\[$(tput setab 7)\]"
 
   readonly DIM="\[$(tput dim)\]"
   readonly REVERSE="\[$(tput rev)\]"
@@ -45,8 +47,18 @@ __powerline() {
     printf " $GIT_BRANCH_SYMBOL$branch$marks "
   }
 
+  __virtualenv() {
+    if [ -z "${VIRTUAL_ENV}" ] ; then
+        return
+    else
+        local virtualenv="$(basename $VIRTUAL_ENV)"
+        printf " $PYTHON_SYMBOL $virtualenv "
+    fi
+  }
+
   ps1() {
     PS1="$BG_WHITE$FG_BASE02 \w $RESET"
+    PS1+="$BG_GRAY$FG_BASE02$(__virtualenv)$RESET"
     PS1+="$BG_LUNA_GREEN$FG_BASE3$(__git_info)$RESET\n└─▪ "
   }
 
